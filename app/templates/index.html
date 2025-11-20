@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <!-- Заголовок -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4">MusicStock: Реестр</h1>
+            <p class="lead">Музыкальный магазин с богатой коллекцией пластинок</p>
+        </div>
+    </div>
+
+    <!-- Сетка с ансамблями -->
+    <div class="row">
+        {% if ensembles %}
+            {% for ensemble in ensembles %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if ensemble.image_url %}
+                    <img src="{{ ensemble.image_url }}" class="card-img-top" alt="{{ ensemble.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <span class="text-muted">Нет изображения</span>
+                    </div>
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ ensemble.name }}</h5>
+                        <p class="card-text text-muted">{{ ensemble.type }}</p>
+                        {% if ensemble.description %}
+                        <p class="card-text flex-grow-1">{{ ensemble.description[:100] }}{% if ensemble.description|length > 100 %}...{% endif %}</p>
+                        {% endif %}
+                        <a href="{{ url_for('main.ensemble_detail', ensemble_id=ensemble.id) }}" class="btn btn-primary mt-auto">
+                            Смотреть пластинки
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center">
+                <div class="alert alert-info">
+                    <h4>Ансамбли не найдены</h4>
+                    <p>Добавьте ансамбли в базу данных</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
