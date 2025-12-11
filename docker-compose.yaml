@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  sqlite3:
+    image: keinos/sqlite3
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  server:
+    container_name: server_new
+    hostname: server
+    build:
+      context: /home/kali/new_mindset
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./music_store.db:/app/music_store.db 
+    restart: always
+    depends_on:
+      - sqlite3

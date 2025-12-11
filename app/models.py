@@ -1,5 +1,15 @@
-from app import db
+from app import db, login_manager
+from flask_login import UserMixin
 from datetime import datetime
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    role = db.Column(db.String(20), default='user')  # user, manager, admin
+    
+    def __repr__(self):
+        return f'<User {self.username}>'
 
 class Ensemble(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -25,3 +35,7 @@ class Record(db.Model):
     
     def __repr__(self):
         return f'<Record {self.catalog_number} - {self.title}>'
+    
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))

@@ -1,6 +1,7 @@
 from app import create_app, db
-from app.models import Ensemble, Record
+from app.models import User, Ensemble, Record
 from datetime import date
+from werkzeug.security import generate_password_hash
 
 def init_database():
     app = create_app()
@@ -17,7 +18,32 @@ def init_database():
         db.create_all()
         
         print("🎵 Добавляем тестовые данные с реальными картинками...")
+        # Создаем тестовых пользователей
+        users = [
+            User(
+                username='admin',
+                password_hash=generate_password_hash('123456'),
+                role='admin'
+            ),
+            User(
+                username='manager',
+                password_hash=generate_password_hash('123456'),
+                role='manager'
+            ),
+            User(
+                username='user',
+                password_hash=generate_password_hash('123456'),
+                role='user'
+            ),
+        ]
         
+        for user in users:
+            db.session.add(user)
+        
+        db.session.commit()
+        print("✅ Пользователи добавлены!")
+        
+        print("🎵 Добавляем ансамбли и пластинки...")
         # Ансамбли с реальными URL картинками
         beatles = Ensemble(
             name="The Beatles", 
