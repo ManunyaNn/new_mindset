@@ -16,3 +16,7 @@ def ensemble_detail(ensemble_id):
     ensemble = Ensemble.query.get_or_404(ensemble_id)
     records = Record.query.filter_by(ensemble_id=ensemble_id).all()
     return render_template('ensemble_detail.html', ensemble=ensemble, records=records)
+
+@main.route('/about')
+def about():
+    return render_template('about.html', title='О проекте')
